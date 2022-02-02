@@ -88,7 +88,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       <body style="font-family:system-ui,sans-serif">
         Redirecting you to <a href="${e(url)}">${e(url)}</a>...
         <script>
-          // document.location.href = "${e(url)}";
+          document.location.href = "${e(url)}";
         </script>
       </body>
     </html>
