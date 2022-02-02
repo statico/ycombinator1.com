@@ -82,10 +82,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         <meta name="twitter:description" content="${e(snippet)}" />
         <meta name="twitter:image" content="https://news.ycombinator1.com/favicon.png" />
 
+        <meta http-equiv="refresh" content="0;url=${e(url)}" />
+
       </head>
-      <body>
+      <body style="font-family:system-ui,sans-serif">
+        Redirecting you to <a href="${e(url)}">${e(url)}</a>...
         <script>
-          document.location.href = "${e(url)}";
+          // document.location.href = "${e(url)}";
         </script>
       </body>
     </html>
