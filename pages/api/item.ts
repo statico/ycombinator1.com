@@ -46,10 +46,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         "posted " + relativeTime,
       ].join(" - ")
 
-  res.status(200).send(
-    `
-		<!DOCTYPE html>
-		<html>
+  res
+    .setHeader("content-type", "text/html")
+    .status(200)
+    .send(
+      `
+		<!doctype html>
+		<html lang="en-us">
 			<head>
 				<meta charset="utf-8" />
 
@@ -67,16 +70,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 				<meta property="article:published_time" content="${e(isoTime)}" />
 				<meta property="og:description" content="${e(snippet)}" />
 
-				<meta itemProp="name" content="${e(title)}" />
-				<meta itemProp="description" content="${e(snippet)}" />
-				<meta itemProp="datePublished" content="${e(isoTime)}" />
-				<meta itemProp="author" content="${e(author)}" />
+				<meta itemprop="name" content="${e(title)}" />
+				<meta itemprop="description" content="${e(snippet)}" />
+				<meta itemprop="datePublished" content="${e(isoTime)}" />
+				<meta itemprop="author" content="${e(author)}" />
 
 				<meta name="twitter:card" content="summary" />
 				<meta name="twitter:site" content="@HackerNews" />
 				<meta name="twitter:title" content="${e(title)}" />
 				<meta name="twitter:url" content="${e(url)}" />
 				<meta name="twitter:description" content="${e(snippet)}" />
+				<meta name="twitter:image" content="https://news.ycombinator1.com/favicon.png" />
 
 			</head>
 			<body>
@@ -86,7 +90,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 			</body>
 		</html>
 	`
-      .trim()
-      .replace(/^\s+/gm, "")
-  )
+        .trim()
+        .replace(/^\s+/gm, "")
+    )
 }
