@@ -1,4 +1,4 @@
-# ycombinator1.com
+# news.ycombinator1.com
 
 Lets you add a character to [Hacker News](https://news.ycombinator.com) links to add social media and OpenGraph previews for sharing on things like Slack or Discord.
 
