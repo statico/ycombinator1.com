@@ -1,9 +1,10 @@
-import { formatISO } from "date-fns"
+import { formatDistanceToNowStrict, formatISO, formatRelative } from "date-fns"
 import { decode, encode } from "html-entities"
 import { NextApiRequest, NextApiResponse } from "next"
 import fetch from "node-fetch"
+import pluralize from "pluralize"
 
-const truncate = (str: string, length = 140, ending = "…") => {
+const truncate = (str = "", length = 160, ending = "…") => {
   if (str.length > length) {
     return str.substring(0, length - ending.length) + ending
   }
@@ -30,12 +31,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const url = `https://news.ycombinator.com/item?id=${id}`
   const { text, type, by: author } = data
+  const time = new Date(data.time * 1000)
+  const isoTime = formatISO(time)
+  const relativeTime = formatDistanceToNowStrict(time, { addSuffix: true })
   const isComment = type === "comment"
   const title =
-    (isComment ? `Comment by ${author}` : data.title) + " | Hacker News"
-  const snippet =
-    truncate(text ?? "", 160) || "View the discussion on Hacker News"
-  const time = formatISO(new Date(data.time * 1000))
+    (isComment ? `Comment by ${author} ${relativeTime}` : data.title) +
+    " | Hacker News"
+  const snippet = isComment
+    ? truncate(text)
+    : [
+        pluralize("vote", data.score, true),
+        pluralize("comment", data.descendants, true),
+        "posted " + relativeTime,
+      ].join(" - ")
 
   res.status(200).send(
     `
@@ -54,12 +63,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 				<meta property="og:title" content="${e(title)}" />
 				<meta property="og:url" content="${e(url)}" />
 				<meta property="og:type" content="article" />
-				<meta property="article:published_time" content="${e(time)}" />
+				<meta property="article:published_time" content="${e(isoTime)}" />
 				<meta property="og:description" content="${e(snippet)}" />
 
 				<meta itemProp="name" content="${e(title)}" />
 				<meta itemProp="description" content="${e(snippet)}" />
-				<meta itemProp="datePublished" content="${e(time)}" />
+				<meta itemProp="datePublished" content="${e(isoTime)}" />
 				<meta itemProp="author" content="${e(author)}" />
 
 				<meta name="twitter:card" content="summary" />
