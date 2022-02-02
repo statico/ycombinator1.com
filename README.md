@@ -12,4 +12,4 @@ Simply add a `1` to your Hacker News link, such as `https://news.ycombinator1.co
 
 <img width="586" alt="CleanShot 2022-02-01 at 22 56 06@2x" src="https://user-images.githubusercontent.com/137158/152107766-42a4f926-ee66-4d85-b48a-af14c1fb1c44.png">
 
-Powered by [Vercel](https://vercel.com/)
+Powered by [Vercel](https://vercel.com/) and the [Hacker News API](https://github.com/HackerNews/API)
