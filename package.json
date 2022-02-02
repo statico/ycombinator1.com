@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "git@github.com:statico/ycombinator1.com.git",
   "author": "Ian Langworth <ian@langworth.com>",
-  "license": "MIT",
+  "license": "Unlicense",
   "private": true,
   "scripts": {
     "dev": "next dev",
