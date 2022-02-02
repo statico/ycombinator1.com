@@ -51,45 +51,45 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     .status(200)
     .send(
       `
-		<!doctype html>
-		<html lang="en-us">
-			<head>
-				<meta charset="utf-8" />
+    <!doctype html>
+    <html lang="en-us">
+      <head>
+        <meta charset="utf-8" />
 
-				<title>${e(title)}</title>
+        <title>${e(title)}</title>
 
-				<meta name="description" content="${e(snippet)}" />
-				<link rel="apple-touch-icon" href="https://news.ycombinator1.com/favicon.png" />
-				<link rel="shortcut icon" href="https://news.ycombinator1.com/favicon.png" />
-				<link rel="canonical" href="${e(url)}" />
+        <meta name="description" content="${e(snippet)}" />
+        <link rel="apple-touch-icon" href="https://news.ycombinator1.com/favicon.png" />
+        <link rel="shortcut icon" href="https://news.ycombinator1.com/favicon.png" />
+        <link rel="canonical" href="${e(url)}" />
 
-				<meta property="og:site_name" content="Hacker News" />
-				<meta property="og:title" content="${e(title)}" />
-				<meta property="og:url" content="${e(url)}" />
-				<meta property="og:type" content="article" />
-				<meta property="article:published_time" content="${e(isoTime)}" />
-				<meta property="og:description" content="${e(snippet)}" />
+        <meta property="og:site_name" content="Hacker News" />
+        <meta property="og:title" content="${e(title)}" />
+        <meta property="og:url" content="${e(url)}" />
+        <meta property="og:type" content="article" />
+        <meta property="article:published_time" content="${e(isoTime)}" />
+        <meta property="og:description" content="${e(snippet)}" />
 
-				<meta itemprop="name" content="${e(title)}" />
-				<meta itemprop="description" content="${e(snippet)}" />
-				<meta itemprop="datePublished" content="${e(isoTime)}" />
-				<meta itemprop="author" content="${e(author)}" />
+        <meta itemprop="name" content="${e(title)}" />
+        <meta itemprop="description" content="${e(snippet)}" />
+        <meta itemprop="datePublished" content="${e(isoTime)}" />
+        <meta itemprop="author" content="${e(author)}" />
 
-				<meta name="twitter:card" content="summary" />
-				<meta name="twitter:site" content="@HackerNews" />
-				<meta name="twitter:title" content="${e(title)}" />
-				<meta name="twitter:url" content="${e(url)}" />
-				<meta name="twitter:description" content="${e(snippet)}" />
-				<meta name="twitter:image" content="https://news.ycombinator1.com/favicon.png" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@HackerNews" />
+        <meta name="twitter:title" content="${e(title)}" />
+        <meta name="twitter:url" content="${e(url)}" />
+        <meta name="twitter:description" content="${e(snippet)}" />
+        <meta name="twitter:image" content="https://news.ycombinator1.com/favicon.png" />
 
-			</head>
-			<body>
-				<script>
-					document.location.href = "${e(url)}";
-				</script>
-			</body>
-		</html>
-	`
+      </head>
+      <body>
+        <script>
+          document.location.href = "${e(url)}";
+        </script>
+      </body>
+    </html>
+  `
         .trim()
         .replace(/^\s+/gm, "")
     )
