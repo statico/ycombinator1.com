@@ -36,7 +36,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const snippet =
     truncate(text ?? "", 160) || "View the discussion on Hacker News"
   const time = formatISO(new Date(data.time * 1000))
-  const image = "https://news.ycombinator1.com/social-512px.png"
 
   res.status(200).send(
     `
@@ -47,6 +46,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 				<title>${e(title)}</title>
 
 				<meta name="description" content="${e(snippet)}" />
+				<link rel="apple-touch-icon" href="https://news.ycombinator1.com/favicon.png" />
+				<link rel="shortcut icon" href="https://news.ycombinator1.com/favicon.png" />
+				<link rel="canonical" href="${e(url)}" />
 
 				<meta property="og:site_name" content="Hacker News" />
 				<meta property="og:title" content="${e(title)}" />
@@ -54,19 +56,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 				<meta property="og:type" content="article" />
 				<meta property="article:published_time" content="${e(time)}" />
 				<meta property="og:description" content="${e(snippet)}" />
-				<meta property="og:image" content="${e(image)}" />
 
 				<meta itemProp="name" content="${e(title)}" />
 				<meta itemProp="description" content="${e(snippet)}" />
 				<meta itemProp="datePublished" content="${e(time)}" />
 				<meta itemProp="author" content="${e(author)}" />
 
-				<meta name="twitter:card" content="summary_large_image" />
+				<meta name="twitter:card" content="summary" />
 				<meta name="twitter:site" content="HackerNews" />
 				<meta name="twitter:title" content="${e(title)}" />
 				<meta name="twitter:url" content="${e(url)}" />
 				<meta name="twitter:description" content="${e(snippet)}" />
-				<meta name="twitter:image" content="${e(image)}" />
 
 			</head>
 			<body>
