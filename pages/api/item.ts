@@ -48,9 +48,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   res.status(200).send(
     `
-		<!doctype html>
+		<!DOCTYPE html>
 		<html>
 			<head>
+				<meta charset="utf-8" />
 
 				<title>${e(title)}</title>
 
@@ -72,7 +73,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 				<meta itemProp="author" content="${e(author)}" />
 
 				<meta name="twitter:card" content="summary" />
-				<meta name="twitter:site" content="HackerNews" />
+				<meta name="twitter:site" content="@HackerNews" />
 				<meta name="twitter:title" content="${e(title)}" />
 				<meta name="twitter:url" content="${e(url)}" />
 				<meta name="twitter:description" content="${e(snippet)}" />
