@@ -4,8 +4,6 @@ import { NextApiRequest, NextApiResponse } from "next"
 import fetch from "node-fetch"
 import pluralize from "pluralize"
 
-const HN_ANNOUNCEMENT_ID = 30181167
-
 const truncate = (str = "", length = 160, ending = "…") => {
   if (str.length > length) {
     return str.substring(0, length - ending.length) + ending
@@ -16,7 +14,7 @@ const truncate = (str = "", length = 160, ending = "…") => {
 const e = (str: string) => encode(decode(str))
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const id = String(req.query.id || HN_ANNOUNCEMENT_ID)
+  const id = String(req.query.id)
   if (!/^\d+$/.test(id)) {
     return res.status(400).send("Malformed id")
   }
