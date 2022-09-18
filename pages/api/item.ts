@@ -1,4 +1,4 @@
-import { formatDistanceToNowStrict, formatISO, formatRelative } from "date-fns"
+import { formatDistanceToNowStrict, formatISO } from "date-fns"
 import { decode, encode } from "html-entities"
 import { NextApiRequest, NextApiResponse } from "next"
 import fetch from "node-fetch"
