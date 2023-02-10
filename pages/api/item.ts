@@ -84,7 +84,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         <meta http-equiv="refresh" content="0;url=${e(url)}" />
 
-        <script src="https://s.langworth.com/data.js" data-token="decfacac" defer></script>
+        <script src="https://s.langworth.com/data.js" data-token="decfacac"></script>
       </head>
       <body style="font-family:system-ui,sans-serif">
         Redirecting you to <a href="${e(url)}">${e(url)}</a>...
