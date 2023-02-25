@@ -13,6 +13,6 @@ module.exports = {
         source: "/:path*",
         destination: "/api/redirect",
       },
-    ]
+    ];
   },
-}
+};
