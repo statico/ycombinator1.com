@@ -1,50 +1,16 @@
-import { formatDistanceToNowStrict, formatISO } from "date-fns";
 import { decode, encode } from "html-entities";
 import { NextApiRequest, NextApiResponse } from "next";
-import fetch from "node-fetch";
-import pluralize from "pluralize";
-
-const truncate = (str = "", length = 160, ending = "…") => {
-  if (str.length > length) {
-    return str.substring(0, length - ending.length) + ending;
-  }
-  return str;
-};
+import { getHNLinkInfo } from "lib/hn";
 
 const e = (str: string) => encode(decode(str));
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const id = String(req.query.id);
   if (!/^\d+$/.test(id)) {
-    return res.status(400).send("Malformed id");
+    return res.status(400).send("Invalid ID");
   }
 
-  let data: any;
-  try {
-    data = await fetch(
-      `https://hacker-news.firebaseio.com/v0/item/${id}.json`
-    ).then((res) => res.json());
-  } catch (err) {
-    console.error(err);
-    return res.status(500).send("Could not fetch item info");
-  }
-
-  const url = `https://news.ycombinator.com/item?id=${id}`;
-  const { text, type, by: author } = data;
-  const time = new Date(data.time * 1000);
-  const isoTime = formatISO(time);
-  const relativeTime = formatDistanceToNowStrict(time, { addSuffix: true });
-  const isComment = type === "comment";
-  const title =
-    (isComment ? `Comment by ${author} ${relativeTime}` : data.title) +
-    " | Hacker News";
-  const snippet = isComment
-    ? truncate(text)
-    : [
-        pluralize("vote", data.score, true),
-        pluralize("comment", data.descendants, true),
-        "posted " + relativeTime,
-      ].join(" - ");
+  const { url, author, isoTime, title, snippet } = await getHNLinkInfo(id);
 
   res
     .setHeader("content-type", "text/html")
