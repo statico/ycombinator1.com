@@ -41,52 +41,53 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (body.type === "url_verification") {
     res.send(body.challenge);
     return;
-  } else {
-    res.send("ok");
   }
 
-  // Send the 200 OK response as soon as possible and do the hard work later.
-  setImmediate(async () => {
-    if (body.type !== "event_callback") return;
-    if (body.event?.type !== "link_shared") return;
+  if (body.type !== "event_callback" || body.event?.type !== "link_shared") {
+    res.send("ok");
+    return;
+  }
 
-    const unfurls: any = {};
-    for (const link of body.event.links) {
-      try {
-        const url = new URL(link.url);
-        const id = url.searchParams.get("id");
-        console.log("getting info for item", id);
-        const { title, snippet } = await getHNLinkInfo(id);
-        unfurls[link.url] = {
-          blocks: [
-            {
-              type: "section",
-              text: {
-                type: "mrkdwn",
-                text: `<${link.url}|*${title}*>\n\n${snippet}`,
-              },
-              accessory: {
-                type: "image",
-                image_url: "https://news.ycombinator1.com/favicon.png",
-                alt_text: "Hacker News Logo",
-              },
+  const unfurls: any = {};
+  for (const link of body.event.links) {
+    try {
+      const url = new URL(link.url);
+      const id = url.searchParams.get("id");
+      console.log("getting info for item", id);
+      const { title, snippet } = await getHNLinkInfo(id, 250);
+      unfurls[link.url] = {
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `<${link.url}|*${title}*>\n\n${snippet}`,
             },
-          ],
-        };
-      } catch (err) {
-        console.error("could not get info for URL", link.url, err);
-      }
+            accessory: {
+              type: "image",
+              image_url: "https://news.ycombinator1.com/favicon.png",
+              alt_text: "Hacker News Logo",
+            },
+          },
+        ],
+      };
+    } catch (err) {
+      console.error("could not get info for URL", link.url, err);
     }
+  }
 
-    // https://api.slack.com/methods/chat.unfurl/test
-    const token = process.env.SLACK_TOKEN;
-    const url = new URL("https://slack.com/api/chat.unfurl");
-    url.searchParams.set("source", body.event.source);
-    url.searchParams.set("unfurl_id", body.event.unfurl_id);
-    url.searchParams.set("unfurls", JSON.stringify(unfurls));
-    const res = await fetch(url.toString(), {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    console.log("response from slack:", await res.text());
+  // https://api.slack.com/methods/chat.unfurl/test
+  const token = process.env.SLACK_TOKEN;
+  const url = new URL("https://slack.com/api/chat.unfurl");
+  url.searchParams.set("source", body.event.source);
+  url.searchParams.set("unfurl_id", body.event.unfurl_id);
+  url.searchParams.set("unfurls", JSON.stringify(unfurls));
+  const res2 = await fetch(url.toString(), {
+    headers: { Authorization: `Bearer ${token}` },
   });
+  console.log("response from slack:", await res2.text());
+
+  // Don't try to be smart and send OK early, otherwise Vercel's response
+  // handlers do strange and mysterious things.
+  res.send("ok");
 };

@@ -1,5 +1,6 @@
 import { formatDistanceToNowStrict, formatISO } from "date-fns";
 import pluralize from "pluralize";
+import { convert } from "html-to-text";
 
 const truncate = (str = "", length = 160, ending = "…") => {
   if (str.length > length) {
@@ -8,10 +9,14 @@ const truncate = (str = "", length = 160, ending = "…") => {
   return str;
 };
 
-export const getHNLinkInfo = async (id: string) => {
-  const data: any = await fetch(
+export const getHNLinkInfo = async (
+  id: string,
+  truncateSnippetLength = 160
+) => {
+  const res = await fetch(
     `https://hacker-news.firebaseio.com/v0/item/${id}.json`
-  ).then((res) => res.json());
+  );
+  const data = await res.json();
 
   const url = `https://news.ycombinator.com/item?id=${id}`;
   const { text, type, by: author } = data;
@@ -23,7 +28,7 @@ export const getHNLinkInfo = async (id: string) => {
     (isComment ? `Comment by ${author} ${relativeTime}` : data.title) +
     " | Hacker News";
   const snippet = isComment
-    ? truncate(text)
+    ? truncate(convert(text, { wordwrap: false }), truncateSnippetLength)
     : [
         pluralize("vote", data.score, true),
         pluralize("comment", data.descendants, true),
