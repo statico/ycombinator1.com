@@ -60,7 +60,8 @@ export default function Page() {
       <p>
         <a href="https://github.com/statico/ycombinator1.com">
           Source on GitHub
-        </a>
+        </a>{" "}
+        - <a href="/privacy.html">Privacy Policy</a>
       </p>
     </div>
   );
