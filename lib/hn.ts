@@ -1,5 +1,4 @@
 import { formatDistanceToNowStrict, formatISO } from "date-fns";
-import fetch from "node-fetch";
 import pluralize from "pluralize";
 
 const truncate = (str = "", length = 160, ending = "…") => {
