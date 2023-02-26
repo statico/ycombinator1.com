@@ -1,12 +1,21 @@
 import { createHmac } from "crypto";
 import { getHNLinkInfo } from "lib/hn";
 import { NextApiRequest, NextApiResponse } from "next";
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+
+const s3 = new S3Client({
+  region: process.env.YC1_AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.YC1_AWS_ACCESS_KEY,
+    secretAccessKey: process.env.YC1_AWS_SECRET_KEY,
+  },
+});
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   // Read the body in as a string
@@ -76,8 +85,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
+  let token: string;
+  try {
+    const s3res = await s3.send(
+      new GetObjectCommand({
+        Bucket: process.env.YC1_AWS_BUCKET_NAME,
+        Key: `/tokens/${body.team_id}`,
+      })
+    );
+    token = await s3res.Body.transformToString();
+  } catch (err) {
+    console.error(`failed to get token for team ${body.team_id}: ${err}`);
+  }
+
   // https://api.slack.com/methods/chat.unfurl/test
-  const token = process.env.SLACK_TOKEN;
   const url = new URL("https://slack.com/api/chat.unfurl");
   url.searchParams.set("source", body.event.source);
   url.searchParams.set("unfurl_id", body.event.unfurl_id);
