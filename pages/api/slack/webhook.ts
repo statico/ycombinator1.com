@@ -1,21 +1,13 @@
 import { createHmac } from "crypto";
-import { getHNLinkInfo } from "lib/hn";
+import { getHNLinkInfo } from "lib/hacker-news";
+import { getAccessToken } from "lib/access-tokens";
 import { NextApiRequest, NextApiResponse } from "next";
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
-const s3 = new S3Client({
-  region: process.env.YC1_AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.YC1_AWS_ACCESS_KEY,
-    secretAccessKey: process.env.YC1_AWS_SECRET_KEY,
-  },
-});
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   // Read the body in as a string
@@ -47,11 +39,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const body = JSON.parse(rawBody);
 
+  // Handle Events verification handshake: https://api.slack.com/apis/connections/events-api#handshake
   if (body.type === "url_verification") {
     res.send(body.challenge);
     return;
   }
 
+  // Ignore all events other than things we need to unfurl.
   if (body.type !== "event_callback" || body.event?.type !== "link_shared") {
     res.send("ok");
     return;
@@ -61,9 +55,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   for (const link of body.event.links) {
     try {
       const url = new URL(link.url);
+      if (url.host !== "news.ycombinator.com") {
+        // This should never happen, but just in case...
+        console.log(`ignoring host ${url.host}`);
+        continue;
+      }
+
       const id = url.searchParams.get("id");
-      console.log("getting info for item", id);
+      if (!/^\d+$/.test(id)) {
+        console.log(`ignoring invalid id ${id}`);
+        continue;
+      }
+
+      console.log(`getting info for HN item ${id}`);
       const { title, snippet } = await getHNLinkInfo(id, 250);
+
+      // This is kinda the best I could do using https://app.slack.com/block-kit-builder
       unfurls[link.url] = {
         blocks: [
           {
@@ -81,24 +88,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         ],
       };
     } catch (err) {
-      console.error("could not get info for URL", link.url, err);
+      console.error(`could not get info for URL ${link.url}: ${err}`);
     }
   }
 
-  let token: string;
-  try {
-    const s3res = await s3.send(
-      new GetObjectCommand({
-        Bucket: process.env.YC1_AWS_BUCKET_NAME,
-        Key: `/tokens/${body.team_id}`,
-      })
-    );
-    token = await s3res.Body.transformToString();
-  } catch (err) {
-    console.error(`failed to get token for team ${body.team_id}: ${err}`);
-  }
-
-  // https://api.slack.com/methods/chat.unfurl/test
+  // Post the unfurl: https://api.slack.com/methods/chat.unfurl/test
+  const token = await getAccessToken(body.team_id);
   const url = new URL("https://slack.com/api/chat.unfurl");
   url.searchParams.set("source", body.event.source);
   url.searchParams.set("unfurl_id", body.event.unfurl_id);
