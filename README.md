@@ -12,7 +12,7 @@ Install the Slack application to automatically get previews (unfurls) for `news.
 
 It looks like this:
 
-<img src="https://user-images.githubusercontent.com/137158/221394895-7a6a29a3-3685-4784-bf27-0746e79e19b5.png" height="500" alt="screenshot of Slack integration"/>
+<img src="https://user-images.githubusercontent.com/137158/221394895-7a6a29a3-3685-4784-bf27-0746e79e19b5.png" width="500" height="267" alt="screenshot of Slack integration"/>
 
 ## Discord / Twitter / Manual Usage
 
