@@ -9,17 +9,22 @@ export default function Page() {
       <p className="notice">
         This site is not affiliated with YCombinator or Hacker News.
       </p>
+
       {router.query?.installed && (
         <p className="alert">
           The HN Previews Slack App has been installed to your Slack workspace.
           Enjoy!
         </p>
       )}
+
       <p>
-        This site lets you add a single character to{" "}
+        This service lets you add a single character to{" "}
         <a href="https://news.ycombinator.com">Hacker News</a> links to add
         social media and OpenGraph previews for sharing on things like Slack or
-        Discord or Twitter or Teams.
+        Discord or Twitter or Teams.{" "}
+        <a href="https://news.ycombinator.com/item?id=30181167">
+          Read more about it in the Hacker News announcement here.
+        </a>
       </p>
 
       <h2>Slack App</h2>
@@ -38,17 +43,20 @@ export default function Page() {
           />
         </a>
       </p>
+      <p>It looks like this:</p>
+      <p>
+        <img
+          src="https://user-images.githubusercontent.com/137158/221394895-7a6a29a3-3685-4784-bf27-0746e79e19b5.png"
+          height="500"
+          alt="screenshot of Slack integration"
+        />
+      </p>
 
       <h2>Discord / Twitter / Manual Usage</h2>
       <p>
         Simply add a <code>1</code> to your Hacker News link, such as{" "}
         <code>https://news.ycombinator1.com/item?id=30167605</code>, and you'll
         see a rich preview instead of a plain URL.
-      </p>
-      <p>
-        <a href="https://news.ycombinator.com/item?id=30181167">
-          Read more about it in the Hacker News announcement here.
-        </a>
       </p>
       <p>On Slack you'll see:</p>
       <p>

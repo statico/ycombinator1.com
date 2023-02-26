@@ -1,13 +1,5 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { setAccessToken } from "lib/access-tokens";
 import { NextApiRequest, NextApiResponse } from "next";
-
-const s3 = new S3Client({
-  region: process.env.YC1_AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.YC1_AWS_ACCESS_KEY,
-    secretAccessKey: process.env.YC1_AWS_SECRET_KEY,
-  },
-});
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const clientId = process.env.SLACK_CLIENT_ID;
@@ -15,6 +7,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (!clientId || !clientSecret)
     throw new Error("Slack OAuth client ID and secret must be specified");
 
+  // Trade the OAuth callback code for an access token, which also finalizes
+  // the app installation process.
   const res2 = await fetch("https://slack.com/api/oauth.v2.access", {
     method: "POST",
     headers: {
@@ -29,15 +23,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const obj = await res2.json();
 
   if (obj.ok) {
-    await s3.send(
-      new PutObjectCommand({
-        Bucket: process.env.YC1_AWS_BUCKET_NAME,
-        Key: `/tokens/${obj.team.id}`,
-        Body: obj.access_token,
-      })
-    );
+    // Store the access code for later.
+    await setAccessToken(obj.team_id, obj.access_token);
     res.setHeader("Location", "/?installed=1").status(302).end();
   } else {
+    // Encourage users to tell me about errors if they see one here.
     res.status(500).send(`
       There was an error during install. Please report a bug at
       https://github.com/statico/ycombinator1.com/issues

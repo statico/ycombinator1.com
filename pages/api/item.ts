@@ -1,6 +1,6 @@
 import { decode, encode } from "html-entities";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getHNLinkInfo } from "lib/hn";
+import { getHNLinkInfo } from "lib/hacker-news";
 
 const e = (str: string) => encode(decode(str));
 
