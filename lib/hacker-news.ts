@@ -1,6 +1,6 @@
 import { formatDistanceToNowStrict, formatISO } from "date-fns";
-import pluralize from "pluralize";
 import { convert } from "html-to-text";
+import pluralize from "pluralize";
 
 const truncate = (str = "", length = 160, ending = "…") => {
   if (str.length > length) {
