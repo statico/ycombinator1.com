@@ -11,6 +11,25 @@ export default function Page() {
         social media and OpenGraph previews for sharing on things like Slack or
         Discord or Twitter or Teams.
       </p>
+
+      <h2>Slack App</h2>
+      <p>
+        Install the Slack application to automatically get previews (unfurls)
+        for <code>news.ycombinator.com</code> links.
+      </p>
+      <p>
+        <a href="https://slack.com/oauth/v2/authorize?client_id=124731001364.4852465343846&scope=links:read,links:write&user_scope=">
+          <img
+            alt="Add to Slack"
+            height="40"
+            width="139"
+            src="https://platform.slack-edge.com/img/add_to_slack.png"
+            srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
+          />
+        </a>
+      </p>
+
+      <h2>Discord / Twitter / Manual Usage</h2>
       <p>
         Simply add a <code>1</code> to your Hacker News link, such as{" "}
         <code>https://news.ycombinator1.com/item?id=30167605</code>, and you'll
