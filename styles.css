@@ -13,6 +13,11 @@ body {
   margin-right: auto;
 }
 
+.alert {
+  background: #cfc;
+  padding: 30px;
+}
+
 .notice {
   color: #f00;
 }
@@ -21,6 +26,9 @@ body {
   body {
     background: #1c1c1c;
     color: #ccc;
+  }
+  .alert {
+    background: #050;
   }
   .notice {
     color: #ff0;
