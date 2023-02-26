@@ -1,10 +1,20 @@
+import { useRouter } from "next/router";
+
 export default function Page() {
+  const router = useRouter();
+
   return (
     <div className="content">
       <h1>news.ycombinator1.com</h1>
       <p className="notice">
         This site is not affiliated with YCombinator or Hacker News.
       </p>
+      {router.query?.installed && (
+        <p className="alert">
+          The HN Previews Slack App has been installed to your Slack workspace.
+          Enjoy!
+        </p>
+      )}
       <p>
         This site lets you add a single character to{" "}
         <a href="https://news.ycombinator.com">Hacker News</a> links to add
