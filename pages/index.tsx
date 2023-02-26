@@ -1,10 +1,34 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 
 export default function Page() {
   const router = useRouter();
 
+  const url = "https://news.ycombinator1.com";
+  const image =
+    "https://user-images.githubusercontent.com/137158/221394895-7a6a29a3-3685-4784-bf27-0746e79e19b5.png";
+  const title = "news.ycombinator1.com";
+  const description =
+    "Hacker News link preview service for Slack, Discord, Twitter, etc.";
+
   return (
     <div className="content">
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="apple-touch-icon" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.png" />
+        <link rel="canonical" href={url} />
+        <meta property="og:site_name" content={title} />
+        <meta property="og:title" content={title} />
+        <meta property="og:url" content={url} />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={image} />
+        <meta itemProp="name" content={title} />
+        <meta itemProp="description" content={description} />
+      </Head>
+
       <h1>news.ycombinator1.com</h1>
       <p className="notice">
         This site is not affiliated with YCombinator or Hacker News.
