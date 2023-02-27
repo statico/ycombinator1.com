@@ -132,7 +132,7 @@ export default function Page() {
       <h2 className="text-xl pt-5">Miscellaneous</h2>
       <p>
         Powered by <Link href="https://vercel.com/">Vercel</Link> and the{" "}
-        <Link href="https://github.com/HackerNews/API">Hacker News API</Link>.
+        <Link href="https://github.com/HackerNews/API">Hacker News API</Link>.{" "}
         <Link href="https://github.com/statico/ycombinator1.com">
           Source on GitHub
         </Link>
