@@ -128,15 +128,27 @@ export default function Page() {
           src="https://user-images.githubusercontent.com/137158/152107766-42a4f926-ee66-4d85-b48a-af14c1fb1c44.png"
         />
       </p>
+
+      <h2 className="text-xl pt-5">Miscellaneous</h2>
       <p>
         Powered by <Link href="https://vercel.com/">Vercel</Link> and the{" "}
         <Link href="https://github.com/HackerNews/API">Hacker News API</Link>.
-      </p>
-      <p>
         <Link href="https://github.com/statico/ycombinator1.com">
           Source on GitHub
         </Link>
-        .
+      </p>
+
+      <h2 className="text-xl pt-5">Privacy</h2>
+      <p>
+        For the redirect service, I don't store logs of requested links other
+        than keeping some basic site usage statistics using my lightweight
+        <Link href="https://github.com/statico/femtostats">
+          Femtostats
+        </Link>{" "}
+        analytics project. For the Slack app, I may occasionally view the Vercel
+        function logs to debug something, but those aren't stored permanently
+        and must be viewed live. Other than that, I only store Slack API bot
+        tokens on S3.
       </p>
     </div>
   );
