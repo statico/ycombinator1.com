@@ -141,10 +141,8 @@ export default function Page() {
       <h2 className="text-xl pt-5">Privacy</h2>
       <p>
         For the redirect service, I don't store logs of requested links other
-        than keeping some basic site usage statistics using my lightweight
-        <Link href="https://github.com/statico/femtostats">
-          Femtostats
-        </Link>{" "}
+        than keeping some basic site usage statistics using my lightweight{" "}
+        <Link href="https://github.com/statico/femtostats">Femtostats</Link>{" "}
         analytics project. For the Slack app, I may occasionally view the Vercel
         function logs to debug something, but those aren't stored permanently
         and must be viewed live. Other than that, I only store Slack API bot
