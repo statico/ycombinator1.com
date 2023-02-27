@@ -1,5 +1,18 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { ReactNode } from "react";
+
+const Alert = ({ color, children }: { color: string; children: ReactNode }) => (
+  <p className={`rounded p-5 bg-${color}-200 dark:bg-${color}-800`}>
+    {children}
+  </p>
+);
+
+const Link = ({ href, children }: { href: string; children: ReactNode }) => (
+  <a href={href} className="text-blue-500 dark:text-blue-300">
+    {children}
+  </a>
+);
 
 export default function Page() {
   const router = useRouter();
@@ -12,7 +25,7 @@ export default function Page() {
     "Hacker News link preview service for Slack, Discord, Twitter, etc.";
 
   return (
-    <div className="content">
+    <div className="space-y-4">
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -29,34 +42,35 @@ export default function Page() {
         <meta itemProp="description" content={description} />
       </Head>
 
-      <h1>news.ycombinator1.com</h1>
-      <p className="notice">
+      <h1 className="text-3xl">news.ycombinator1.com</h1>
+
+      <Alert color="red">
         This site is not affiliated with YCombinator or Hacker News.
-      </p>
+      </Alert>
 
       {router.query?.installed && (
-        <p className="alert">
+        <Alert color="green">
           The HN Previews Slack App has been installed to your Slack workspace.
-          Enjoy!
-        </p>
+          Enjoy! 🎉
+        </Alert>
       )}
 
       <p>
         This service lets you add a single character to{" "}
-        <a href="https://news.ycombinator.com">Hacker News</a> links to add
-        social media and OpenGraph previews for sharing on things like Slack or
-        Discord or Twitter or Teams.{" "}
-        <a href="https://news.ycombinator.com/item?id=30181167">
+        <Link href="https://news.ycombinator.com">Hacker News</Link> links to
+        add social media and OpenGraph previews for sharing on things like Slack
+        or Discord or Twitter or Teams.{" "}
+        <Link href="https://news.ycombinator.com/item?id=30181167">
           Read more about it in the Hacker News announcement here.
-        </a>
+        </Link>
       </p>
 
-      <h2>Slack App</h2>
+      <h2 className="text-xl pt-5">Slack App</h2>
       <p>
         Install the Slack application to automatically get previews (unfurls)
         for <code>news.ycombinator.com</code> links.
       </p>
-      <p>
+      <p className="flex justify-center">
         <a href="https://slack.com/oauth/v2/authorize?client_id=124731001364.4852465343846&scope=links:read,links:write&user_scope=">
           <img
             alt="Add to Slack"
@@ -76,7 +90,7 @@ export default function Page() {
         />
       </p>
 
-      <h2>Discord / Twitter / Manual Usage</h2>
+      <h2 className="text-xl pt-5">Discord / Twitter / Manual Usage</h2>
       <p>
         Simply add a <code>1</code> to your Hacker News link, such as{" "}
         <code>https://news.ycombinator1.com/item?id=30167605</code>, and you'll
@@ -115,13 +129,14 @@ export default function Page() {
         />
       </p>
       <p>
-        Powered by <a href="https://vercel.com/">Vercel</a> and the{" "}
-        <a href="https://github.com/HackerNews/API">Hacker News API</a>.
+        Powered by <Link href="https://vercel.com/">Vercel</Link> and the{" "}
+        <Link href="https://github.com/HackerNews/API">Hacker News API</Link>.
       </p>
       <p>
-        <a href="https://github.com/statico/ycombinator1.com">
+        <Link href="https://github.com/statico/ycombinator1.com">
           Source on GitHub
-        </a>
+        </Link>
+        .
       </p>
     </div>
   );
