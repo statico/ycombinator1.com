@@ -1,7 +1,3 @@
-// Load .env file using Node.js built-in support (works with or without --env-file flag)
-import { loadEnvFile } from "./lib/load-env.js";
-loadEnvFile();
-
 import Fastify, { type FastifyInstance } from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
