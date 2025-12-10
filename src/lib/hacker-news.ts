@@ -9,14 +9,25 @@ const truncate = (str = "", length = 160, ending = "…") => {
   return str;
 };
 
+interface HNItem {
+  id: number;
+  title?: string;
+  text?: string;
+  type: string;
+  by?: string;
+  time: number;
+  score?: number;
+  descendants?: number;
+}
+
 export const getHNLinkInfo = async (
   id: string,
-  truncateSnippetLength = 160
+  truncateSnippetLength = 160,
 ) => {
   const res = await fetch(
-    `https://hacker-news.firebaseio.com/v0/item/${id}.json`
+    `https://hacker-news.firebaseio.com/v0/item/${id}.json`,
   );
-  const data = await res.json();
+  const data = (await res.json()) as HNItem;
 
   const url = `https://news.ycombinator.com/item?id=${id}`;
   const { text, type, by: author } = data;
@@ -28,10 +39,10 @@ export const getHNLinkInfo = async (
     (isComment ? `Comment by ${author} ${relativeTime}` : data.title) +
     " | Hacker News";
   const snippet = isComment
-    ? truncate(convert(text, { wordwrap: false }), truncateSnippetLength)
+    ? truncate(convert(text || "", { wordwrap: false }), truncateSnippetLength)
     : [
-        pluralize("vote", data.score, true),
-        pluralize("comment", data.descendants, true),
+        pluralize("vote", data.score || 0, true),
+        pluralize("comment", data.descendants || 0, true),
         "posted " + relativeTime,
       ].join(" - ");
 
