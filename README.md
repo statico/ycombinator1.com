@@ -34,6 +34,50 @@ On Twitter you'll see:
 
 ![Twitter preview](https://user-images.githubusercontent.com/137158/152107766-42a4f926-ee66-4d85-b48a-af14c1fb1c44.png)
 
-Powered by [Vercel](https://vercel.com/) and the [Hacker News API](https://github.com/HackerNews/API).
+Powered by [Fastify](https://www.fastify.io/) and the [Hacker News API](https://github.com/HackerNews/API).
 
 [Source on GitHub](https://github.com/statico/ycombinator1.com)
+
+## Development
+
+### Prerequisites
+
+- Node.js 20.x or higher
+- npm or yarn
+
+### Setup
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+2. Copy `.env.example` to `.env` and configure environment variables (optional, only needed for Slack app functionality)
+
+3. Run the development server:
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Build for production:
+
+   ```bash
+   npm run build
+   # or
+   yarn build
+   ```
+
+5. Start production server:
+   ```bash
+   npm start
+   # or
+   yarn start
+   ```
+
+The server will start on `http://localhost:3000` by default (or the port specified in the `PORT` environment variable).
