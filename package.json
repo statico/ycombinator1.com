@@ -9,7 +9,7 @@
   "license": "Unlicense",
   "private": true,
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch --env-file=.env src/server.ts",
     "build": "tsc",
     "start": "node --env-file=.env dist/server.js",
     "type-check": "tsc --noEmit"
