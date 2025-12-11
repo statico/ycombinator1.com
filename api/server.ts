@@ -1,4 +1,5 @@
-import { createApp } from "../dist/server.js";
+import { createApp } from "../src/server.js";
+import type { HTTPMethods, InjectOptions } from "fastify";
 
 type VercelRequest = {
   url?: string;
@@ -32,30 +33,36 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     url = url.includes("?") ? `${url}&${queryString}` : `${url}?${queryString}`;
   }
 
-  const method = req.method || "GET";
+  const method = (req.method || "GET") as HTTPMethods;
 
-  const response = await app.inject({
-    method,
+  const injectOptions = {
+    method: method,
     url,
     headers: req.headers || {},
     query: req.query || {},
-    body: req.body,
-    payload: req.body,
-  });
+    ...(req.body !== undefined && req.body !== null && { body: req.body, payload: req.body }),
+  } as InjectOptions;
+
+  const response = await app.inject(injectOptions);
 
   // Set response headers
-  Object.entries(response.headers).forEach(([key, value]) => {
-    res.setHeader(key, value);
-  });
+  if (response.headers) {
+    Object.entries(response.headers).forEach(([key, value]) => {
+      if (value !== undefined) {
+        res.setHeader(key, String(value));
+      }
+    });
+  }
 
   // Set status and send response
   res.status(response.statusCode);
 
   // Handle different response types
-  const contentType = response.headers["content-type"] || "";
-  if (contentType.includes("application/json")) {
+  const contentType = response.headers?.["content-type"] || "";
+  if (typeof contentType === "string" && contentType.includes("application/json")) {
     try {
-      res.json(JSON.parse(response.body));
+      const body = typeof response.body === "string" ? response.body : JSON.stringify(response.body);
+      res.json(JSON.parse(body));
     } catch {
       res.send(response.body);
     }
