@@ -1,4 +1,4 @@
-import { createApp } from "../dist/src/server.js";
+import { createApp } from "../dist/server.js";
 
 type VercelRequest = {
   url?: string;
