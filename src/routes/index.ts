@@ -131,13 +131,10 @@ const indexRoute: FastifyPluginAsync = async (fastify) => {
 
       <h2 class="text-xl pt-5">Privacy</h2>
       <p>
-        For the redirect service, I don't store logs of requested links other
-        than keeping some basic site usage statistics using my lightweight
-        <a href="https://github.com/statico/femtostats" class="text-blue-500 dark:text-blue-300">Femtostats</a>
-        analytics project. For the Slack app, I may occasionally view the server
-        logs to debug something, but those aren't stored permanently
-        and must be viewed live. Other than that, I only store Slack API bot
-        tokens on S3.
+        This is hosted on Vercel, so your requests go there. Logs are stored for
+        1 hour as part of the free plan. Simple metrics to track usage, like
+        request count per error code, are stored longer, and don't seem to
+        retain any personal data.
       </p>
     </div>
   </body>
