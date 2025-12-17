@@ -43,7 +43,7 @@ Powered by [Fastify](https://www.fastify.io/) and the [Hacker News API](https://
 ### Prerequisites
 
 - Node.js 20.x or higher
-- npm or yarn
+- pnpm
 
 ### Setup
 
@@ -52,7 +52,7 @@ Powered by [Fastify](https://www.fastify.io/) and the [Hacker News API](https://
    ```bash
    npm install
    # or
-   yarn install
+   pnpm install
    ```
 
 2. Copy `.env.example` to `.env` and configure environment variables (optional, only needed for Slack app functionality)
@@ -62,7 +62,7 @@ Powered by [Fastify](https://www.fastify.io/) and the [Hacker News API](https://
    ```bash
    npm run dev
    # or
-   yarn dev
+   pnpm dev
    ```
 
 4. Build for production:
@@ -70,14 +70,14 @@ Powered by [Fastify](https://www.fastify.io/) and the [Hacker News API](https://
    ```bash
    npm run build
    # or
-   yarn build
+   pnpm build
    ```
 
 5. Start production server:
    ```bash
    npm start
    # or
-   yarn start
+   pnpm start
    ```
 
 The server will start on `http://localhost:3000` by default (or the port specified in the `PORT` environment variable).
