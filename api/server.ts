@@ -1,10 +1,11 @@
 import { createApp } from "../src/server.js";
 import type { HTTPMethods, InjectOptions } from "fastify";
+import type { IncomingMessage } from "http";
 
-type VercelRequest = {
+type VercelRequest = IncomingMessage & {
   url?: string;
   method?: string;
-  headers?: Record<string, string>;
+  headers: Record<string, string>;
   query?: Record<string, string>;
   body?: unknown;
 };
@@ -15,6 +16,23 @@ type VercelResponse = {
   json: (data: unknown) => void;
   send: (data: unknown) => void;
 };
+
+// Disable Vercel's body parsing so we can forward the raw body to Fastify.
+// This preserves the exact bytes for HMAC signature verification.
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+function getRawBody(req: IncomingMessage): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    req.on("data", (chunk: Buffer) => chunks.push(chunk));
+    req.on("end", () => resolve(Buffer.concat(chunks)));
+    req.on("error", reject);
+  });
+}
 
 let app: Awaited<ReturnType<typeof createApp>> | null = null;
 
@@ -35,17 +53,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const method = (req.method || "GET") as HTTPMethods;
 
-  // Remove content-length since Vercel already parsed the body and the
-  // original content-length won't match the re-serialized payload.
+  // Remove content-length since it may not match after proxy processing.
   const headers = { ...(req.headers || {}) };
   delete headers["content-length"];
+
+  // Read the raw body to preserve exact bytes for signature verification.
+  const rawBody = await getRawBody(req);
 
   const injectOptions = {
     method: method,
     url,
     headers,
     query: req.query || {},
-    ...(req.body !== undefined && req.body !== null && { body: req.body, payload: req.body }),
+    ...(rawBody.length > 0 && { payload: rawBody }),
   } as InjectOptions;
 
   const response = await app.inject(injectOptions);
