@@ -35,10 +35,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const method = (req.method || "GET") as HTTPMethods;
 
+  // Remove content-length since Vercel already parsed the body and the
+  // original content-length won't match the re-serialized payload.
+  const headers = { ...(req.headers || {}) };
+  delete headers["content-length"];
+
   const injectOptions = {
     method: method,
     url,
-    headers: req.headers || {},
+    headers,
     query: req.query || {},
     ...(req.body !== undefined && req.body !== null && { body: req.body, payload: req.body }),
   } as InjectOptions;
