@@ -34,14 +34,15 @@ const callbackRoute: FastifyPluginAsync = async (fastify) => {
       });
       const obj = (await res.json()) as {
         ok: boolean;
-        team_id?: string;
+        team?: { id: string };
         access_token?: string;
         error?: string;
       };
 
-      if (obj.ok && obj.team_id && obj.access_token) {
+      const teamId = obj.team?.id;
+      if (obj.ok && teamId && obj.access_token) {
         // Store the access code for later.
-        await setAccessToken(obj.team_id, obj.access_token);
+        await setAccessToken(teamId, obj.access_token);
         return reply.status(302).header("Location", "/?installed=1").send();
       } else {
         // Encourage users to tell me about errors if they see one here.
