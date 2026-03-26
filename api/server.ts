@@ -1,4 +1,4 @@
-import { handle } from "hono/vercel";
+import { getRequestListener } from "@hono/node-server";
 import app from "../src/server.js";
 
 // Disable Vercel's body parsing so the raw body is available for
@@ -9,4 +9,4 @@ export const config = {
   },
 };
 
-export default handle(app);
+export default getRequestListener(app.fetch);
