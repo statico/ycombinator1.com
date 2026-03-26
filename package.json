@@ -15,12 +15,9 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastify/cors": "^11.2.0",
-    "@fastify/helmet": "^13.0.2",
-    "@fastify/static": "^9.0.0",
+    "@hono/node-server": "^1.14.1",
     "date-fns": "^4.1.0",
-    "fastify": "^5.8.4",
-    "fastify-raw-body": "^5.0.0",
+    "hono": "^4.7.7",
     "html-entities": "^2.6.0",
     "html-to-text": "^9.0.5",
     "pluralize": "^8.0.0",
