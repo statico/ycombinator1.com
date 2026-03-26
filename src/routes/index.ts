@@ -1,12 +1,9 @@
-import { FastifyPluginAsync } from "fastify";
+import type { Context } from "hono";
 
-const indexRoute: FastifyPluginAsync = async (fastify) => {
-  fastify.get<{ Querystring: { installed?: string } }>(
-    "/",
-    async (request, reply) => {
-      const installed = request.query.installed === "1";
+export const indexRoute = async (c: Context) => {
+  const installed = c.req.query("installed") === "1";
 
-      const html = `
+  const html = `
 <!doctype html>
 <html lang="en-us">
   <head>
@@ -139,11 +136,7 @@ const indexRoute: FastifyPluginAsync = async (fastify) => {
     </div>
   </body>
 </html>
-    `.trim();
+  `.trim();
 
-      return reply.type("text/html").send(html);
-    },
-  );
+  return c.html(html);
 };
-
-export default indexRoute;

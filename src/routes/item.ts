@@ -1,22 +1,19 @@
-import { FastifyPluginAsync } from "fastify";
+import type { Context } from "hono";
 import { decode, encode } from "html-entities";
 import { getHNLinkInfo } from "../lib/hacker-news.js";
 
 const e = (str: string) => encode(decode(str));
 
-const itemRoute: FastifyPluginAsync = async (fastify) => {
-  fastify.get<{ Querystring: { id: string } }>(
-    "/item",
-    async (request, reply) => {
-      const { id } = request.query;
+export const itemRoute = async (c: Context) => {
+  const id = c.req.query("id");
 
-      if (!id || !/^\d+$/.test(id)) {
-        return reply.status(400).send("Invalid ID");
-      }
+  if (!id || !/^\d+$/.test(id)) {
+    return c.text("Invalid ID", 400);
+  }
 
-      const { url, author, isoTime, title, snippet } = await getHNLinkInfo(id);
+  const { url, author, isoTime, title, snippet } = await getHNLinkInfo(id);
 
-      const html = `
+  const html = `
 <!doctype html>
 <html lang="en-us">
   <head>
@@ -57,13 +54,9 @@ const itemRoute: FastifyPluginAsync = async (fastify) => {
     </script>
   </body>
 </html>
-    `
-        .trim()
-        .replace(/^\s+/gm, "");
+  `
+    .trim()
+    .replace(/^\s+/gm, "");
 
-      return reply.type("text/html").send(html);
-    },
-  );
+  return c.html(html);
 };
-
-export default itemRoute;
