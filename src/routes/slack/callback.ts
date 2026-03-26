@@ -1,59 +1,53 @@
-import { FastifyPluginAsync } from "fastify";
+import type { Context } from "hono";
 import { setAccessToken } from "../../lib/access-tokens.js";
 import { env } from "../../lib/env.js";
 
-const callbackRoute: FastifyPluginAsync = async (fastify) => {
-  fastify.get<{ Querystring: { code?: string } }>(
-    "/api/slack/callback",
-    async (request, reply) => {
-      const { code } = request.query;
+export const callbackRoute = async (c: Context) => {
+  const code = c.req.query("code");
 
-      if (!code) {
-        return reply.status(400).send("Missing code parameter");
-      }
+  if (!code) {
+    return c.text("Missing code parameter", 400);
+  }
 
-      const clientId = env.SLACK_CLIENT_ID;
-      const clientSecret = env.SLACK_CLIENT_SECRET;
+  const clientId = env.SLACK_CLIENT_ID;
+  const clientSecret = env.SLACK_CLIENT_SECRET;
 
-      if (!clientId || !clientSecret) {
-        throw new Error("Slack OAuth client ID and secret must be specified");
-      }
+  if (!clientId || !clientSecret) {
+    throw new Error("Slack OAuth client ID and secret must be specified");
+  }
 
-      // Trade the OAuth callback code for an access token, which also finalizes
-      // the app installation process.
-      const res = await fetch("https://slack.com/api/oauth.v2.access", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          code,
-          client_id: clientId,
-          client_secret: clientSecret,
-        }),
-      });
-      const obj = (await res.json()) as {
-        ok: boolean;
-        team?: { id: string };
-        access_token?: string;
-        error?: string;
-      };
-
-      const teamId = obj.team?.id;
-      if (obj.ok && teamId && obj.access_token) {
-        // Store the access code for later.
-        await setAccessToken(teamId, obj.access_token);
-        return reply.status(302).header("Location", "/?installed=1").send();
-      } else {
-        // Encourage users to tell me about errors if they see one here.
-        return reply.status(500).send(`
-          There was an error during install. Please report a bug at
-          https://github.com/statico/ycombinator1.com/issues
-          with this information: ${JSON.stringify(obj)}
-        `);
-      }
+  // Trade the OAuth callback code for an access token, which also finalizes
+  // the app installation process.
+  const res = await fetch("https://slack.com/api/oauth.v2.access", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-  );
-};
+    body: new URLSearchParams({
+      code,
+      client_id: clientId,
+      client_secret: clientSecret,
+    }),
+  });
+  const obj = (await res.json()) as {
+    ok: boolean;
+    team?: { id: string };
+    access_token?: string;
+    error?: string;
+  };
 
-export default callbackRoute;
+  const teamId = obj.team?.id;
+  if (obj.ok && teamId && obj.access_token) {
+    // Store the access code for later.
+    await setAccessToken(teamId, obj.access_token);
+    return c.redirect("/?installed=1", 302);
+  } else {
+    // Encourage users to tell me about errors if they see one here.
+    return c.text(
+      `There was an error during install. Please report a bug at
+https://github.com/statico/ycombinator1.com/issues
+with this information: ${JSON.stringify(obj)}`,
+      500,
+    );
+  }
+};
