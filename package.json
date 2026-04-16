@@ -17,7 +17,7 @@
   "dependencies": {
     "@hono/node-server": "^1.19.13",
     "date-fns": "^4.1.0",
-    "hono": "^4.12.12",
+    "hono": "^4.12.14",
     "html-entities": "^2.6.0",
     "html-to-text": "^9.0.5",
     "pluralize": "^8.0.0",
