@@ -1,7 +1,4 @@
-import { Hono } from "hono";
-import { cors } from "hono/cors";
-import { secureHeaders } from "hono/secure-headers";
-import { logger } from "hono/logger";
+import { App, cors, secureHeaders, logger, serve, serveStatic } from "@statico/zerodep-node-http-server";
 import { env } from "./lib/env.js";
 
 import { indexRoute } from "./routes/index.js";
@@ -9,7 +6,7 @@ import { itemRoute } from "./routes/item.js";
 import { callbackRoute } from "./routes/slack/callback.js";
 import { webhookRoute } from "./routes/slack/webhook.js";
 
-const app = new Hono();
+const app = new App();
 
 // Middleware
 app.use("*", logger());
@@ -65,9 +62,6 @@ const isMainModule =
   process.argv[1]?.endsWith("server.ts");
 
 if (isMainModule && !process.env.VERCEL) {
-  const { serve } = await import("@hono/node-server");
-  const { serveStatic } = await import("@hono/node-server/serve-static");
-
   // Static files only needed in dev - Vercel serves public/ automatically
   app.use("/*", serveStatic({ root: "./public" }));
 

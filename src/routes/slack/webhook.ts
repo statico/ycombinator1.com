@@ -1,4 +1,4 @@
-import type { Context } from "hono";
+import type { Context } from "@statico/zerodep-node-http-server";
 import { createHmac } from "crypto";
 import { getHNLinkInfo } from "../../lib/hacker-news.js";
 import { getAccessToken } from "../../lib/access-tokens.js";

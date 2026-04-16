@@ -1,4 +1,4 @@
-import type { Context } from "hono";
+import type { Context } from "@statico/zerodep-node-http-server";
 import { decode, encode } from "html-entities";
 import { getHNLinkInfo } from "../lib/hacker-news.js";
 

@@ -1,4 +1,4 @@
-import type { Context } from "hono";
+import type { Context } from "@statico/zerodep-node-http-server";
 
 export const indexRoute = async (c: Context) => {
   const installed = c.req.query("installed") === "1";
