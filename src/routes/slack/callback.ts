@@ -1,4 +1,4 @@
-import type { Context } from "hono";
+import type { Context } from "@statico/zerodep-node-http-server";
 import { setAccessToken } from "../../lib/access-tokens.js";
 import { env } from "../../lib/env.js";
 
