@@ -171,15 +171,12 @@ export const indexRoute = async (c: Context) => {
         font-variation-settings: "opsz" 144, "SOFT" 30;
         font-weight: 500;
         font-style: italic;
-        font-size: clamp(40px, 8vw, 76px);
-        line-height: 0.95;
+        font-size: clamp(22px, 7.2vw, 68px);
+        line-height: 1;
         letter-spacing: -0.025em;
         color: var(--ink);
         margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 0.18em;
-        flex-wrap: wrap;
+        white-space: nowrap;
       }
 
       .nameplate .one {
@@ -218,31 +215,41 @@ export const indexRoute = async (c: Context) => {
       /* ── DISCLAIMER STAMP ───────────────────────────── */
 
       .stamp {
-        margin: 26px 0 6px;
-        border: 2px solid var(--orange-deep);
-        color: var(--orange-deep);
-        background: transparent;
-        padding: 12px 18px;
+        margin: 30px 0 8px;
+        border: 3px solid var(--ink);
+        color: var(--ink);
+        background: var(--orange);
+        padding: 18px 22px;
         font-family: "IBM Plex Mono", monospace;
-        font-size: 12px;
+        font-size: 14px;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.16em;
-        line-height: 1.5;
+        letter-spacing: 0.14em;
+        line-height: 1.45;
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 16px;
         position: relative;
+        box-shadow: 6px 6px 0 var(--ink);
       }
       .stamp::before {
         content: "⚠";
-        font-size: 18px;
+        font-size: 28px;
         line-height: 1;
         flex-shrink: 0;
       }
       .stamp strong {
-        font-weight: 600;
-        color: var(--orange-deep);
-        margin-right: 4px;
+        display: block;
+        font-family: "Fraunces", serif;
+        font-variation-settings: "opsz" 60;
+        font-style: italic;
+        font-weight: 700;
+        font-size: 22px;
+        text-transform: none;
+        letter-spacing: -0.01em;
+        line-height: 1.05;
+        margin-bottom: 4px;
+        color: var(--ink);
       }
 
       .installed {
@@ -395,12 +402,12 @@ export const indexRoute = async (c: Context) => {
       }
 
       .fig-frame {
-        background: white;
         border: 1px solid var(--ink);
-        padding: 12px 12px 0;
         box-shadow: 6px 6px 0 var(--ink);
         max-width: 100%;
-        display: inline-block;
+        display: block;
+        line-height: 0;
+        background: var(--paper-deep);
       }
 
       .fig-frame img {
@@ -550,7 +557,7 @@ export const indexRoute = async (c: Context) => {
       </header>
 
       <div class="stamp reveal">
-        <span><strong>Notice:</strong> Not affiliated with Y&nbsp;Combinator or Hacker News.</span>
+        <span><strong>Not affiliated.</strong> This site has no association with Y&nbsp;Combinator or Hacker News.</span>
       </div>
 
       ${
@@ -725,7 +732,6 @@ export const indexRoute = async (c: Context) => {
       </section>
 
       <footer class="reveal">
-        <span>© news.ycombinator1.com</span>
         <span>Set in Fraunces &amp; IBM Plex Mono</span>
         <span><a href="https://github.com/statico/ycombinator1.com">View source ↗</a></span>
       </footer>
