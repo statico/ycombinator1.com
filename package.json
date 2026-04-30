@@ -8,6 +8,7 @@
   "author": "Ian Langworth <ian@langworth.com>",
   "license": "Unlicense",
   "private": true,
+  "packageManager": "pnpm@10.33.2",
   "scripts": {
     "dev": "tsx watch --env-file=.env src/server.ts",
     "build": "tsc",
@@ -29,5 +30,8 @@
     "@types/pluralize": "^0.0.33",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
   }
 }
