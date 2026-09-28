@@ -1,5 +1,5 @@
 import type { Context } from "@statico/zerodep-node-http-server";
-import { createHmac } from "crypto";
+import { createHmac, timingSafeEqual } from "crypto";
 import { getHNLinkInfo } from "../../lib/hacker-news.js";
 import { getAccessToken } from "../../lib/access-tokens.js";
 import { env } from "../../lib/env.js";
@@ -29,13 +29,17 @@ export const webhookRoute = async (c: Context) => {
 
   if (signingSecret) {
     const timestamp = c.req.header("x-slack-request-timestamp") || "";
+    // Reject replays: Slack recommends a 5-minute window.
+    if (Math.abs(Date.now() / 1000 - Number(timestamp)) > 60 * 5) {
+      return c.text("Stale request", 401);
+    }
     const hmac = createHmac("sha256", signingSecret);
     hmac.update(["v0", timestamp, bodyString].join(":"));
-    const sig = "v0=" + hmac.digest("hex");
-    const receivedSig = c.req.header("x-slack-signature") || "";
+    const sig = Buffer.from("v0=" + hmac.digest("hex"));
+    const receivedSig = Buffer.from(c.req.header("x-slack-signature") || "");
 
-    if (sig !== receivedSig) {
-      throw new Error("Invalid signature");
+    if (sig.length !== receivedSig.length || !timingSafeEqual(sig, receivedSig)) {
+      return c.text("Invalid signature", 401);
     }
     console.log("signature ok");
   }

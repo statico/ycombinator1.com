@@ -3,10 +3,10 @@
   "buildCommand": "npm run build",
   "framework": null,
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/server"
-    }
+    { "source": "/", "destination": "/api/server" },
+    { "source": "/item", "destination": "/api/server" },
+    { "source": "/health", "destination": "/api/server" },
+    { "source": "/api/slack/:path*", "destination": "/api/server" }
   ],
   "functions": {
     "api/server.ts": {
