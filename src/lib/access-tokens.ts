@@ -1,15 +1,19 @@
 import { S3mini } from "s3mini";
 import { env } from "./env.js";
 
-const s3 = new S3mini({
-  accessKeyId: env.YC1_AWS_ACCESS_KEY!,
-  secretAccessKey: env.YC1_AWS_SECRET_KEY!,
-  endpoint: `https://${env.YC1_AWS_BUCKET_NAME}.s3.${env.YC1_AWS_REGION}.amazonaws.com`,
-  region: env.YC1_AWS_REGION,
-});
+// Created lazily so missing AWS env only breaks the Slack routes, not the
+// whole app (s3mini throws on construction with empty credentials).
+let client: S3mini | undefined;
+const s3 = () =>
+  (client ??= new S3mini({
+    accessKeyId: env.YC1_AWS_ACCESS_KEY!,
+    secretAccessKey: env.YC1_AWS_SECRET_KEY!,
+    endpoint: `https://${env.YC1_AWS_BUCKET_NAME}.s3.${env.YC1_AWS_REGION}.amazonaws.com`,
+    region: env.YC1_AWS_REGION,
+  }));
 
 export const setAccessToken = async (teamId: string, accessToken: string) => {
-  const res = await s3.putObject(`tokens/${teamId}`, accessToken);
+  const res = await s3().putObject(`tokens/${teamId}`, accessToken);
   if (!res.ok) {
     throw new Error(
       `S3 PUT failed for team ${teamId}: ${res.status} ${await res.text()}`,
@@ -18,7 +22,7 @@ export const setAccessToken = async (teamId: string, accessToken: string) => {
 };
 
 export const getAccessToken = async (teamId: string) => {
-  const body = await s3.getObject(`tokens/${teamId}`);
+  const body = await s3().getObject(`tokens/${teamId}`);
   if (!body) {
     throw new Error(`No token found for team ${teamId}`);
   }
