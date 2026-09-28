@@ -2,6 +2,14 @@
   "version": 2,
   "buildCommand": "npm run build",
   "framework": null,
+  "redirects": [
+    {
+      "source": "/item",
+      "missing": [{ "type": "header", "key": "user-agent", "value": ".*(Slackbot|Slack-ImgProxy|Discordbot|Twitterbot|facebookexternalhit|LinkedInBot|TelegramBot|WhatsApp|SkypeUriPreview|MicrosoftPreview|Mastodon|Bluesky|Iframely|Embedly|redditbot|Mattermost|Zulip|Signal).*" }],
+      "destination": "https://news.ycombinator.com/item",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/", "destination": "/api/server" },
     { "source": "/item", "destination": "/api/server" },
