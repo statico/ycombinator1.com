@@ -1,5 +1,8 @@
 # news.ycombinator1.com
 
+> [!WARNING]
+> This project is no longer supported and has been shut down due to traffic abuse.
+
 This site is not affiliated with YCombinator or Hacker News.
 
 This service lets you add a single character to [Hacker News](https://news.ycombinator.com) links to add social media and OpenGraph previews for sharing on things like Slack or Discord or Twitter or Teams. [Read more about it in the Hacker News announcement here.](https://news.ycombinator.com/item?id=30181167)
